@@ -58,6 +58,9 @@ class joyjoytest:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     done=True 
+                elif event.type == pygame.KEYDOWN:
+                    if (event.key == pygame.K_q):
+                        done=True
             self.screen.fill((0,0,0))
             self.drawAnim()
         pygame.quit()
