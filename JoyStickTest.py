@@ -4,6 +4,8 @@ import pygame
 from math import pi,sin,cos
 from time import sleep
 class joyjoytest:
+
+
     def __init__(self):
     
         self.nodesOrg =[
@@ -22,8 +24,19 @@ class joyjoytest:
         [0,100]
         ]
         
+        
+        self.nodeLables=[
+        'Left X',
+        'Left Y',
+        'Left Z',
+        'Right X',
+        'Right Y',
+        'Right Z',
+        ]
+        
         self.nodLen = 5
         self.shipcolour = (0,255,0)
+        self.labelColour = (255,255,255)
         self.serialCom = serial.Serial('/dev/ttyUSB0',9600)
 
         pygame.init()
@@ -57,10 +70,12 @@ class joyjoytest:
     def drawAnim(self):   
         
         values = self.readValues()
-        
+        self.drawAxisValues(values)
         left_x=(values[0]/1700)*(self.centreX/2)+(self.centreX/2)
         left_y=-(values[1]/1700)*self.centreY+self.centreY
         left_z=values[2]
+        
+        
         self.rotate(left_z/2000)
         pygame.draw.lines(self.screen, (255,255,255), False, [[left_x,0],[left_x,self.height]], 1)
         pygame.draw.lines(self.screen, (255,255,255), False, [[0,left_y],[self.width,left_y]], 1)
@@ -78,7 +93,12 @@ class joyjoytest:
         self.drawTriangle(right_x,right_y)
         
         pygame.display.flip()
-
+        
+    def drawAxisValues(self, values):
+        for i in range(0, 6, 1):
+            message = "%s: %.2f" % (self.nodeLables[i],values[i])
+            self.drawLabel ([5,30*i+10],message ,22)
+            
     def rotate(self, theta):
         
         sinTheta = sin(theta)
@@ -96,6 +116,11 @@ class joyjoytest:
             y = round(cy + self.nodes[i][1])             
             cords.append([x,y])
         pygame.draw.lines(self.screen, self.shipcolour, False, cords, 1)
-        
+
+    def drawLabel (self,cords,message,fontsize):
+        font = pygame.font.SysFont(None, fontsize)
+        text = font.render(message, True, self.labelColour)
+        self.screen.blit(text,(cords[0], cords[1]))
+         
         
 tmp =  joyjoytest()
