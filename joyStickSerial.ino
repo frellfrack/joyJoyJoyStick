@@ -22,7 +22,7 @@ void loop()
 }
 
 
-void readAxis(int pin, int mid, int jitter, int &prevReading)
+void readAxis(int pin, int mid, int jitter, int z_band, int &prevReading)
 {
    int currentReading =  analogRead(pin);
    
@@ -34,7 +34,7 @@ void readAxis(int pin, int mid, int jitter, int &prevReading)
       prevReading = currentReading;
    }
    // z-banding
-   if ((prevReading > 0  && prevReading < jitter) || (prevReading < 0 && prevReading > -jitter))
+   if ((prevReading > 0  && prevReading < z_band) || (prevReading < 0 && prevReading > -z_band))
    {
       prevReading  = 0;
    }
@@ -53,13 +53,13 @@ void readAxis(int pin, int mid, int jitter, int &prevReading)
 
 void readAxisData()
 {
-   readAxis(34, 1860,200,left_x);
-   readAxis(35, 1776,200,left_y);
-   readAxis(32, 1855,200,left_z);   
+   readAxis(34, 1860,10,200,left_x);
+   readAxis(35, 1776,10,200,left_y);
+   readAxis(32, 1855,10,200,left_z);   
    
-   readAxis(33, 1801,200, right_x);
-   readAxis(25, 1776,350,right_y);
-   readAxis(26, 1853,200,right_z);
+   readAxis(33, 1801,10,200,right_x);
+   readAxis(25, 1900,10,200,right_y);
+   readAxis(26, 1860,10,200,right_z);
    /*
    // get real values to find mid point and jitter values for each axis
    leftt_x =  analogRead(34);
@@ -68,6 +68,8 @@ void readAxisData()
  
    right_x =  analogRead(33);
    right_y =  analogRead(25);
+
+   
    right_z =  analogRead(26);
    */
     
